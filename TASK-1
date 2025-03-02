@@ -1,0 +1,117 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class filehandler {
+   private static final String FILE_NAME = "example.txt";
+
+   public filehandler() {
+   }
+
+   public static void main(String[] var0) {
+      Scanner var1 = new Scanner(System.in);
+      System.out.println("Choose an option: \n1. Write to File \n2. Read File \n3. Modify File");
+      int var2 = var1.nextInt();
+      var1.nextLine();
+      switch (var2) {
+         case 1:
+            System.out.println("Enter text to write to file:");
+            String var3 = var1.nextLine();
+            writeFile(var3);
+            break;
+         case 2:
+            readFile();
+            break;
+         case 3:
+            System.out.println("Enter text to replace in file:");
+            String var4 = var1.nextLine();
+            System.out.println("Enter new text:");
+            String var5 = var1.nextLine();
+            modifyFile(var4, var5);
+            break;
+         default:
+            System.out.println("Invalid choice.");
+      }
+
+      var1.close();
+   }
+
+   private static void writeFile(String var0) {
+      try {
+         BufferedWriter var1 = new BufferedWriter(new FileWriter("example.txt"));
+
+         try {
+            var1.write(var0);
+            System.out.println("File written successfully.");
+         } catch (Throwable var5) {
+            try {
+               var1.close();
+            } catch (Throwable var4) {
+               var5.addSuppressed(var4);
+            }
+
+            throw var5;
+         }
+
+         var1.close();
+      } catch (IOException var6) {
+         System.err.println("Error writing to file: " + var6.getMessage());
+      }
+
+   }
+
+   private static void readFile() {
+      try {
+         BufferedReader var0 = new BufferedReader(new FileReader("example.txt"));
+
+         try {
+            System.out.println("File contents:");
+
+            String var1;
+            while((var1 = var0.readLine()) != null) {
+               System.out.println(var1);
+            }
+         } catch (Throwable var4) {
+            try {
+               var0.close();
+            } catch (Throwable var3) {
+               var4.addSuppressed(var3);
+            }
+
+            throw var4;
+         }
+
+         var0.close();
+      } catch (IOException var5) {
+         System.err.println("Error reading file: " + var5.getMessage());
+      }
+
+   }
+
+   private static void modifyFile(String var0, String var1) {
+      try {
+         File var2 = new File("example.txt");
+         BufferedReader var3 = new BufferedReader(new FileReader(var2));
+         StringBuilder var4 = new StringBuilder();
+
+         String var5;
+         while((var5 = var3.readLine()) != null) {
+            var4.append(var5.replace(var0, var1)).append("\n");
+         }
+
+         var3.close();
+         BufferedWriter var6 = new BufferedWriter(new FileWriter(var2));
+         var6.write(var4.toString());
+         var6.close();
+         System.out.println("File modified successfully.");
+      } catch (IOException var7) {
+         System.err.println("Error modifying file: " + var7.getMessage());
+      }
+
+   }
+}
